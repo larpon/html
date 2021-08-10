@@ -3,10 +3,12 @@
 module html
 
 import os
+import token
 
-pub fn parse_file(path string) {
+pub fn parse_file(path string) []token.Token {
 	mut p := html.new_parser()
 	parse(mut p, path)
+	return p.tokens()
 }
 
 pub fn parse(mut p Parser, path string) {
@@ -51,4 +53,25 @@ pub fn parse(mut p Parser, path string) {
 	*/
 
 	p.end()
+}
+
+pub fn parse_string(mut p Parser, html_input string) {
+	if html_input == '' {
+		panic(@MOD + '.' + @STRUCT + '.' + @FN + '`html_input` is empty')
+	}
+	p.reset()
+	p.parse_string(html_input)
+	p.end()
+}
+
+pub fn beautify_file(path string) string {
+	mut p := html.new_parser()
+	parse(mut p, path)
+	return p.raw_pretty()
+}
+
+pub fn beautify(html_string string) string {
+	mut p := html.new_parser()
+	parse_string(mut p, html_string)
+	return p.raw_pretty()
 }

@@ -10,7 +10,7 @@ const (
 	default_chunk_size = 512
 )
 
-const (
+pub const (
 	void_html4 = ['area', 'base', 'br', 'col', 'hr', 'img', 'input', 'link', 'meta', 'param']
 	void_xhtml = void_html4
 	void_html5 = ['area', 'base', 'br', 'col', 'hr', 'img', 'input', 'link', 'meta', 'param',
@@ -71,6 +71,10 @@ pub fn (mut p Parser) tokens() []token.Token {
 	return tokens
 }
 
+pub fn (mut p Parser) pop_token() token.Token {
+	return p.tnzr.pop()
+}
+
 pub fn (mut p Parser) raw_pretty() string {
 	mut indent := 0
 	mut indt := ''
@@ -127,7 +131,7 @@ pub fn (mut p Parser) raw_pretty() string {
 			html += '$indt$tok.lit.to_lower()\n'
 		}
 	}
-	return html
+	return html.trim('\n')
 }
 
 pub fn (mut p Parser) raw() string {

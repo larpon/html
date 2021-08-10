@@ -4,7 +4,6 @@ import os
 import html
 
 fn test_parser_all() {
-
 	// Re-use the parser instance for speed
 	mut p := html.new_parser()
 
@@ -12,9 +11,9 @@ fn test_parser_all() {
 
 	test_data_path := os.join_path(os.dir(@FILE), 'data')
 
-	dev_test_files := ['berlingske.dk.html','big.string.html','small.html','random.html']
+	dev_test_files := ['berlingske.dk.html', 'big.string.html', 'small.html', 'random.html']
 	for test_file in dev_test_files {
-		path = os.join_path(test_data_path,test_file)
+		path = os.join_path(test_data_path, test_file)
 		eprintln(@MOD + '.' + @FN + ' parsing "$path"')
 		html.parse(mut p, path)
 	}
@@ -24,15 +23,15 @@ fn test_parser_all() {
 	for test_file in test_files {
 		// One of the files in test-suite is zero, in which case the parser will, rightfully, panic. Just skip it.
 		if os.file_size(test_file) == 0 {
-			eprintln(@MOD + '.' + @FN + '"${path}" is 0 in size. Skipping')
+			eprintln(@MOD + '.' + @FN + '"$path" is 0 in size. Skipping')
 			continue
 		}
 		eprintln(@FN + ' parsing "$test_file"')
 		html.parse(mut p, test_file)
 	}
 
-	mut base_path := os.join_path(test_data_path, 'web-platform-tests', 'html',
-		'syntax', 'parsing')
+	base_path := os.join_path(test_data_path, 'web-platform-tests', 'html', 'syntax',
+		'parsing')
 	fs := os.ls(base_path) or { panic(err) }
 	for f in fs {
 		path = os.join_path(base_path, f)
@@ -47,4 +46,24 @@ fn test_parser_all() {
 
 	// Parser hasn't paniced if we reach this point
 	assert true
+}
+
+fn test_parser_beautify() {
+	messy_html := '<!DOCTYPE html><hTmL lang="en"><head><!-- comment --><title>Test</title><meta charset="UTF-8"/><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body></body></html>'
+
+	pretty_html := html.beautify(messy_html)
+
+	assert pretty_html == r'<!doctype html>
+<html lang="en">
+	<head>
+		<!-- comment -->
+		<title>
+			Test
+		</title>
+		<meta charset="utf-8"/>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	</head>
+	<body>
+	</body>
+</html>'
 }
