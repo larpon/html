@@ -18,6 +18,12 @@ fn test_parser_all() {
 		html.parse(mut p, path)
 	}
 
+	//path = os.join_path(test_data_path, 'small.html')
+	//eprintln(@MOD + '.' + @FN + ' parsing "$path"')
+	//html.parse(mut p, path)
+	// TODO make this pass
+	//assert p.raw() == os.read_file(path) or { panic(err) }
+
 	path = os.join_path(test_data_path, 'html-sanitizer-testbed', 'testcases')
 	test_files := os.walk_ext(path, 'html')
 	for test_file in test_files {
@@ -42,28 +48,33 @@ fn test_parser_all() {
 	// NOTE kept for debug purposes
 	// println(p.tokens())
 	// println(p.raw())
-	// println(p.raw_pretty())
 
 	// Parser hasn't paniced if we reach this point
 	assert true
 }
 
-fn test_parser_beautify() {
-	messy_html := '<!DOCTYPE html><hTmL lang="en"><head><!-- comment --><title>Test</title><meta charset="UTF-8"/><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head><body></body></html>'
-
-	pretty_html := html.beautify(messy_html)
-
-	assert pretty_html == r'<!doctype html>
+fn test_parser_raw() {
+	html_input := '<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<!-- comment -->
-		<title>
-			Test
-		</title>
-		<meta charset="utf-8"/>
-		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-	</head>
-	<body>
-	</body>
+  <head>
+  <!-- comment -->
+  <title>Test</title>
+  <meta charset="UTF-8"/><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  </head>
+  <body></body>
+</html>'
+
+	mut p := html.new_parser()
+	html.parse(mut p, html_input)
+
+	// Successful parsing and the input string is equal to the parsed output
+	assert p.raw() == r'<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <!-- comment -->
+  <title>Test</title>
+  <meta charset="UTF-8"/><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  </head>
+  <body></body>
 </html>'
 }
