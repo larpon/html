@@ -14,25 +14,25 @@ fn test_parser_all() {
 	dev_test_files := ['berlingske.dk.html', 'big.string.html', 'small.html', 'random.html']
 	for test_file in dev_test_files {
 		path = os.join_path(test_data_path, test_file)
-		eprintln(@MOD + '.' + @FN + ' parsing "$path"')
+		eprintln(@MOD + '.' + @FN + ' parsing "${path}"')
 		html.parse(mut p, path)
 	}
 
-	//path = os.join_path(test_data_path, 'small.html')
-	//eprintln(@MOD + '.' + @FN + ' parsing "$path"')
-	//html.parse(mut p, path)
+	// path = os.join_path(test_data_path, 'small.html')
+	// eprintln(@MOD + '.' + @FN + ' parsing "$path"')
+	// html.parse(mut p, path)
 	// TODO make this pass
-	//assert p.raw() == os.read_file(path) or { panic(err) }
+	// assert p.raw() == os.read_file(path) or { panic(err) }
 
 	path = os.join_path(test_data_path, 'html-sanitizer-testbed', 'testcases')
 	test_files := os.walk_ext(path, 'html')
 	for test_file in test_files {
 		// One of the files in test-suite is zero, in which case the parser will, rightfully, panic. Just skip it.
 		if os.file_size(test_file) == 0 {
-			eprintln(@MOD + '.' + @FN + '"$path" is 0 in size. Skipping')
+			eprintln(@MOD + '.' + @FN + '"${path}" is 0 in size. Skipping')
 			continue
 		}
-		eprintln(@FN + ' parsing "$test_file"')
+		eprintln(@FN + ' parsing "${test_file}"')
 		html.parse(mut p, test_file)
 	}
 
@@ -41,7 +41,7 @@ fn test_parser_all() {
 	fs := os.ls(base_path) or { panic(err) }
 	for f in fs {
 		path = os.join_path(base_path, f)
-		eprintln(@MOD + '.' + ' parsing "$path"')
+		eprintln(@MOD + '.' + ' parsing "${path}"')
 		html.parse(mut p, path)
 	}
 

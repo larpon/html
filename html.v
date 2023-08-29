@@ -6,7 +6,7 @@ import os
 import token
 
 pub fn parse_file(path string) []token.Token {
-	mut p := html.new_parser()
+	mut p := new_parser()
 	parse(mut p, path)
 	return p.tokens()
 }
@@ -70,7 +70,7 @@ pub fn parse_string(mut p Parser, html_input string) {
 }
 
 pub fn beautify(html_string string) string {
-	mut p := html.new_parser()
+	mut p := new_parser()
 	parse_string(mut p, html_string)
 
 	mut indent := 0
@@ -108,12 +108,12 @@ pub fn beautify(html_string string) string {
 					mut trimmed := ''
 					for cdata_line in cdata_lines {
 						trimmed = cdata_line //.trim_left(' ')
-						html += '$indt$trimmed\n'
+						html += '${indt}${trimmed}\n'
 					}
 				} else {
 					// TODO Can currently be a very slow and memory expensive operation.
 					// ... Especially in debug builds
-					html += '$indt$cdata\n'
+					html += '${indt}${cdata}\n'
 				}
 			}
 		} else {
@@ -125,7 +125,7 @@ pub fn beautify(html_string string) string {
 				}
 				indt = indt.all_after('\t')
 			}
-			html += '$indt$tok.lit.to_lower()\n'
+			html += '${indt}${tok.lit.to_lower()}\n'
 		}
 	}
 	return html.trim('\n') + '\n'

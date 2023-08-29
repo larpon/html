@@ -40,7 +40,7 @@ pub fn (mut p Parser) parse_bytes(bytes []byte) {
 
 pub fn (mut p Parser) parse_string(input string) {
 	mut chunks_left := input.len
-	mut chunk_size := default_chunk_size
+	mut chunk_size := html.default_chunk_size
 	mut s := ''
 	mut pos := 0
 	for chunks_left > 0 {
@@ -48,11 +48,11 @@ pub fn (mut p Parser) parse_string(input string) {
 		if chunk_size > chunks_left {
 			chunk_size = chunks_left
 		}
-		debug.info(@MOD + '.' + @STRUCT + '.' + @FN, 'input slice from $pos to ${pos + chunk_size} ($chunk_size). Left: $chunks_left Total: $input.len')
+		debug.info(@MOD + '.' + @STRUCT + '.' + @FN, 'input slice from ${pos} to ${pos + chunk_size} (${chunk_size}). Left: ${chunks_left} Total: ${input.len}')
 		s = input[pos..pos + chunk_size]
 		pos += chunk_size
 
-		debug.info(@MOD + '.' + @STRUCT + '.' + @FN, 'feeding tokenizer: $s')
+		debug.info(@MOD + '.' + @STRUCT + '.' + @FN, 'feeding tokenizer: ${s}')
 		p.tnzr.feed(s)
 
 		chunks_left -= chunk_size
@@ -75,7 +75,7 @@ pub fn (mut p Parser) raw() string {
 	mut html := ''
 	for i in 0 .. p.tnzr.queued() {
 		tok := p.tnzr.token_at(i)
-		html += '$tok.lit'
+		html += '${tok.lit}'
 	}
 	return html
 }
@@ -83,6 +83,6 @@ pub fn (mut p Parser) raw() string {
 pub fn (mut p Parser) dmp() {
 	for p.tnzr.queued() > 0 {
 		tok := p.tnzr.pop()
-		eprintln('$tok')
+		eprintln('${tok}')
 	}
 }

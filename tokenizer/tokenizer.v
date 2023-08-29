@@ -188,7 +188,7 @@ fn (mut t Tokenizer) new_token(kind token.Kind, lit string) token.Token {
 pub fn (mut t Tokenizer) feed(input string) {
 	if t.state !in [.ready, .initialized] {
 		panic(@MOD + '.' + @STRUCT + '.' + @FN +
-			' parser not in "ready" state, but "$t.state". Maybe parsing has ended? Call reset() to reuse the tokenizer.')
+			' parser not in "ready" state, but "${t.state}". Maybe parsing has ended? Call reset() to reuse the tokenizer.')
 	}
 	t.state = .feeding
 
@@ -199,7 +199,7 @@ pub fn (mut t Tokenizer) feed(input string) {
 	last_chunk := input.len == 0 // TODO
 
 	mut skip := 0
-	mut b := byte(0)
+	mut b := u8(0)
 	mut c := ''
 
 	//$if debug { mut skip_buf := '' }
@@ -368,16 +368,16 @@ pub fn (mut t Tokenizer) feed(input string) {
 				ll := t.line + 1
 				lpos := t.line_pos + 1
 				panic(@MOD + '.' + @STRUCT + '.' + @FN +
-					' Cannot parse $ll:$lpos: "$c" in ... "$t.buffer"')
+					' Cannot parse ${ll}:${lpos}: "${c}" in ... "${t.buffer}"')
 			} else {
 				t.buffer = c + t.buffer
-				debug.info(@MOD + '.' + @STRUCT + '.' + @FN, 'awaiting data ($c) (END) Remaining: $t.buffer')
+				debug.info(@MOD + '.' + @STRUCT + '.' + @FN, 'awaiting data (${c}) (END) Remaining: ${t.buffer}')
 			}
 			break
 		}
 	}
 	if last_chunk && t.buffer.len > 0 {
-		panic(@MOD + '.' + @STRUCT + '.' + @FN + ' remaining data was ignored "$t.buffer"')
+		panic(@MOD + '.' + @STRUCT + '.' + @FN + ' remaining data was ignored "${t.buffer}"')
 	}
 	t.state = .ready
 }
