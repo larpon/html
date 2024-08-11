@@ -75,7 +75,7 @@ pub fn beautify(html_string string) string {
 
 	mut indent := 0
 	mut indt := ''
-	mut html := ''
+	mut htm := ''
 	for i in 0 .. p.tnzr.queued() {
 		tok := p.tnzr.token_at(i)
 
@@ -108,12 +108,12 @@ pub fn beautify(html_string string) string {
 					mut trimmed := ''
 					for cdata_line in cdata_lines {
 						trimmed = cdata_line //.trim_left(' ')
-						html += '${indt}${trimmed}\n'
+						htm += '${indt}${trimmed}\n'
 					}
 				} else {
 					// TODO Can currently be a very slow and memory expensive operation.
 					// ... Especially in debug builds
-					html += '${indt}${cdata}\n'
+					htm += '${indt}${cdata}\n'
 				}
 			}
 		} else {
@@ -125,8 +125,8 @@ pub fn beautify(html_string string) string {
 				}
 				indt = indt.all_after('\t')
 			}
-			html += '${indt}${tok.lit.to_lower()}\n'
+			htm += '${indt}${tok.lit.to_lower()}\n'
 		}
 	}
-	return html.trim('\n') + '\n'
+	return htm.trim('\n') + '\n'
 }

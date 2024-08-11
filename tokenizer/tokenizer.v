@@ -6,9 +6,7 @@ import debug
 import token
 import regex
 
-pub const (
-	whitespaces = ['\t', '\n', '\r', '\f', ' ']
-)
+pub const whitespaces = ['\t', '\n', '\r', '\f', ' ']
 
 pub enum State {
 	initialized
@@ -101,7 +99,7 @@ fn (mut t Tokenizer) new_cdata_mode(mode CDATAMode) {
 	// eprintln(@MOD+' CDATA mode ${t.cdata_mode}')
 }
 
-[inline]
+@[inline]
 fn matches(input string, mut re regex.RE) bool {
 	if input.len == 0 {
 		return false
@@ -111,14 +109,14 @@ fn matches(input string, mut re regex.RE) bool {
 	return start >= 0
 }
 
-[inline]
+@[inline]
 fn tmp_matches(input string, regx string) bool {
 	mut re := regex.regex_opt(regx) or { panic(err) }
 	start, _ := re.match_string(input)
 	return start >= 0
 }
 
-[inline]
+@[inline]
 fn preprocess(input string) string {
 	if input.len == 0 {
 		return input
@@ -144,19 +142,19 @@ fn preprocess(input string) string {
 	return s //.bytes()
 }
 
-[inline]
+@[inline]
 pub fn (mut t Tokenizer) queued() int {
 	return t.queue.len
 }
 
-[inline]
+@[inline]
 pub fn (mut t Tokenizer) pop() token.Token {
 	tok := t.queue.first()
 	t.queue.delete(0)
 	return tok
 }
 
-[inline]
+@[inline]
 pub fn (mut t Tokenizer) token_at(index int) token.Token {
 	return t.queue[index]
 }
@@ -167,7 +165,7 @@ pub fn (mut t Tokenizer) end() {
 	t.queue << t.new_token(.eof, '')
 }
 
-[inline]
+@[inline]
 fn (mut t Tokenizer) new_token(kind token.Kind, lit string) token.Token {
 	/*
 	mut pretty := lit
@@ -178,13 +176,13 @@ fn (mut t Tokenizer) new_token(kind token.Kind, lit string) token.Token {
 
 	return token.Token{
 		kind: kind
-		lit: lit
+		lit:  lit
 		line: t.line
-		pos: t.line_pos
+		pos:  t.line_pos
 	}
 }
 
-[inline]
+@[inline]
 pub fn (mut t Tokenizer) feed(input string) {
 	if t.state !in [.ready, .initialized] {
 		panic(@MOD + '.' + @STRUCT + '.' + @FN +

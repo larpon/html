@@ -6,18 +6,13 @@ import debug
 import token
 import tokenizer
 
-const (
-	default_chunk_size = 512
-)
+const default_chunk_size = 512
 
-pub const (
-	void_html4 = ['area', 'base', 'br', 'col', 'hr', 'img', 'input', 'link', 'meta', 'param']
-	void_xhtml = void_html4
-	void_html5 = ['area', 'base', 'br', 'col', 'hr', 'img', 'input', 'link', 'meta', 'param',
-		'source', 'command', 'keygen']
-		// command [obsolete]
-		// keygen [deprecated]
-)
+pub const void_html4 = ['area', 'base', 'br', 'col', 'hr', 'img', 'input', 'link', 'meta', 'param']
+pub const void_xhtml = void_html4
+pub const void_html5 = ['area', 'base', 'br', 'col', 'hr', 'img', 'input', 'link', 'meta', 'param',
+	'source', 'command', 'keygen'] // command [obsolete]
+// keygen [deprecated]
 
 pub fn new_parser() &Parser {
 	mut parser := &Parser{}
@@ -72,12 +67,12 @@ pub fn (mut p Parser) tokens() []token.Token {
 }
 
 pub fn (mut p Parser) raw() string {
-	mut html := ''
+	mut htm := ''
 	for i in 0 .. p.tnzr.queued() {
 		tok := p.tnzr.token_at(i)
-		html += '${tok.lit}'
+		htm += '${tok.lit}'
 	}
-	return html
+	return htm
 }
 
 pub fn (mut p Parser) dmp() {
